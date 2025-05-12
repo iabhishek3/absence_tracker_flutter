@@ -1,3 +1,4 @@
+# spell-checker: disable
 name: Deploy Absence Tracker flutter web to GitHub Pages
 
 on:
