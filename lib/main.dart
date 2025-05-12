@@ -1,5 +1,5 @@
 import 'package:absence_tracker_flutter/core/di/injection.dart';
-import 'package:absence_tracker_flutter/presentation/pages/absence_list_page.dart';
+import 'package:absence_tracker_flutter/presentation/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'presentation/cubit/theme/theme_cubit.dart';
@@ -60,8 +60,8 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            home: const AbsenceListPage(),
-            // home: const AbsenceListPage(),
+            onGenerateRoute: AppRouter.generateRoute,
+            initialRoute: '/',
           );
         },
       ),
