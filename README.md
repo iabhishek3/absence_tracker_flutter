@@ -126,32 +126,6 @@ flutter run -d chrome
 flutter build web
 ```
 
-## Installation ⚙️
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/absence_tracker_flutter.git
-cd absence_tracker_flutter
-```
-
-2. Install dependencies:
-```bash
-flutter pub get
-```
-
-3. Enable web support (if not already enabled):
-```bash
-flutter config --enable-web
-```
-
-4. Run the web app:
-```bash
-# Run in debug mode
-flutter run -d chrome
-
-# Build for production
-flutter build web
-```
 
 ## Architecture 🏗️
 

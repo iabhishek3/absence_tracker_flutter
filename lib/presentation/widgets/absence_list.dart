@@ -143,9 +143,19 @@ class _LoadingState extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Text(
                     'Member Note',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A2332),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Admitter Note',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1A2332),
@@ -331,42 +341,58 @@ class _LoadedState extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(),
-                AbsenceFilters(state: state),
-                      const Spacer(),
-              ElevatedButton.icon(
-                onPressed: () {
-                  final icalData = context.read<AbsenceCubit>().generateICalData();
-                  
-                  if (icalData.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Failed to generate calendar data. Please try again.'),
-                        backgroundColor: Colors.red,
+              const SizedBox(width: 24),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        constraints: BoxConstraints(
+                          minWidth: constraints.maxWidth,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AbsenceFilters(state: state),
+                            const SizedBox(width: 12),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                final icalData = context.read<AbsenceCubit>().generateICalData();
+                                
+                                if (icalData.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Failed to generate calendar data. Please try again.'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                
+                                FileDownloadUtil.downloadString(
+                                  content: icalData,
+                                  fileName: 'absences.ics',
+                                );
+                              },
+                              icon: const Icon(Icons.download, size: 20),
+                              label: const Text('Export to iCal'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                elevation: 1,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
-                    return;
-                  }
-                  
-                  FileDownloadUtil.downloadString(
-                    content: icalData,
-                    fileName: 'absences.ics',
-                  );
-                },
-                icon: const Icon(Icons.download, size: 20),
-                label: const Text('Export to iCal'),
-                style: ElevatedButton.styleFrom(
-                   backgroundColor: Colors.white,
-                  // foregroundColor: Colors.blue[700],
-                  elevation: 1,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  },
                 ),
               ),
-              const SizedBox(width: 12),
-            
             ],
           ),
           const SizedBox(height: 24),
@@ -410,9 +436,19 @@ class _LoadedState extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Text(
                     'Member Note',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A2332),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Admitter Note',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF1A2332),
@@ -536,6 +572,7 @@ class _AbsenceListRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color statusColor;
+    final capitalizedStatus = status[0].toUpperCase() + status.substring(1).toLowerCase();
     switch (status.toLowerCase()) {
       case 'confirmed':
         statusColor = Colors.green;
@@ -613,11 +650,22 @@ class _AbsenceListRow extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Text(
-                note,
-                style: const TextStyle(
-                  color: Color(0xFF1A2332),
+                note.isEmpty ? 'No member note' : note,
+                style:  TextStyle(
+          color: note.isEmpty ? Colors.grey : const Color(0xFF1A2332),
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                admitterNote.isEmpty ? 'No admitter note' : admitterNote,
+                style: TextStyle(
+                  color: admitterNote.isEmpty ? Colors.grey : const Color(0xFF1A2332),
+                  fontStyle: admitterNote.isEmpty ? FontStyle.italic : FontStyle.normal,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -631,10 +679,10 @@ class _AbsenceListRow extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  status,
+                  capitalizedStatus,
                   style: TextStyle(
                     color: statusColor,
-                    fontWeight: FontWeight.w500,
+                   fontWeight: FontWeight.bold
                   ),
                   textAlign: TextAlign.center,
                 ),

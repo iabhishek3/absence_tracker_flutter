@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, bool>(
         builder: (context, isDarkMode) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Absence Tracker',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
