@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:icalendar_parser/icalendar_parser.dart';
 import '../../../domain/entities/absence.dart';
 import '../../../domain/usecases/get_absences.dart';
 import 'absence_state.dart';
@@ -23,6 +24,7 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   List<Absence> get allAbsences => _allAbsences;
 
   Future<void> getAbsencesList() async {
+    emit(const AbsenceLoading());
     if (_isLoadingMore) return;
     
     if (_currentPage == 1) {
@@ -162,32 +164,85 @@ class AbsenceCubit extends Cubit<AbsenceState> {
   }
 
   String generateICalData() {
-    if (state is! AbsenceLoaded) return '';
+    if (state is! AbsenceLoaded) {
+      debugPrint('State is not AbsenceLoaded, returning empty string');
+      return '';
+    }
 
     final absences = (state as AbsenceLoaded).absences;
-    final buffer = StringBuffer();
+    debugPrint('Generating iCal data for ${absences.length} absences');
     
-    buffer.writeln('BEGIN:VCALENDAR');
-    buffer.writeln('VERSION:2.0');
-    buffer.writeln('PRODID:-//Absence Tracker//EN');
+    final buffer = StringBuffer();
+    final now = DateTime.now().toUtc();
+    final timestamp = _formatTimestamp(now);
+    
+    // Build iCal data according to RFC 5545
+    buffer.write('BEGIN:VCALENDAR\r\n');
+    buffer.write('VERSION:2.0\r\n');
+    buffer.write('PRODID:-//Absence Tracker//NONSGML Absence Calendar V1.0//EN\r\n');
+    buffer.write('CALSCALE:GREGORIAN\r\n');
+    buffer.write('METHOD:PUBLISH\r\n');
     
     for (final absence in absences) {
-      buffer.writeln('BEGIN:VEVENT');
-      buffer.writeln('SUMMARY:${absence.type.name} - ${absence.memberName}');
-      buffer.writeln('DTSTART:${absence.startDate.toUtc().toString().replaceAll('-', '').replaceAll(':', '').split('.')[0]}Z');
-      buffer.writeln('DTEND:${absence.endDate.toUtc().toString().replaceAll('-', '').replaceAll(':', '').split('.')[0]}Z');
-      if (absence.memberNote != null) {
-        buffer.writeln('DESCRIPTION:${absence.memberNote}');
+      debugPrint('Processing absence: ${absence.id}, ${absence.type.name}, ${absence.startDate} - ${absence.endDate}');
+      buffer.write('BEGIN:VEVENT\r\n');
+      buffer.write('UID:absence-${absence.id}@absencetracker.com\r\n');
+      buffer.write('DTSTAMP:${timestamp}\r\n');
+      buffer.write('CREATED:${timestamp}\r\n');
+      buffer.write('LAST-MODIFIED:${timestamp}\r\n');
+      buffer.write('SUMMARY:${_escapeText("${absence.type.name} - ${absence.memberName}")}\r\n');
+      buffer.write('DTSTART;VALUE=DATE:${_formatDate(absence.startDate)}\r\n');
+      buffer.write('DTEND;VALUE=DATE:${_formatDate(absence.endDate.add(const Duration(days: 1)))}\r\n');
+      if (absence.memberNote != null && absence.memberNote!.isNotEmpty) {
+        buffer.write('DESCRIPTION:${_escapeText(absence.memberNote!)}\r\n');
       }
-      buffer.writeln('STATUS:${absence.status.name}');
-      buffer.writeln('END:VEVENT');
+      
+      // Map our status to valid iCal status values
+      final status = switch (absence.status.name.toLowerCase()) {
+        'confirmed' => 'CONFIRMED',
+        'rejected' => 'CANCELLED',
+        _ => 'TENTATIVE',
+      };
+      buffer.write('STATUS:$status\r\n');
+      
+      buffer.write('SEQUENCE:0\r\n');
+      buffer.write('END:VEVENT\r\n');
     }
     
-    buffer.writeln('END:VCALENDAR');
-    return buffer.toString();
+    buffer.write('END:VCALENDAR\r\n');
+
+    // Validate the iCal data using the parser
+    try {
+      final iCalString = buffer.toString();
+      debugPrint('Generated iCal data:\n$iCalString');
+      final iCal = ICalendar.fromString(iCalString);
+      debugPrint('Successfully parsed iCal data');
+      return iCalString;
+    } catch (e) {
+      debugPrint('Error generating iCal data: $e');
+      return '';
+    }
   }
 
+  String _formatDate(DateTime date) {
+    return '${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}';
+  }
 
+  String _formatTimestamp(DateTime date) {
+    return '${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}T'
+           '${date.hour.toString().padLeft(2, '0')}${date.minute.toString().padLeft(2, '0')}${date.second.toString().padLeft(2, '0')}Z';
+  }
+
+  String _escapeText(String text) {
+    return text
+      .replaceAll('\\', '\\\\')
+      .replaceAll(',', '\\,')
+      .replaceAll(';', '\\;')
+      .replaceAll('\n', '\\n')
+      .replaceAll('\r', '')
+      // Fold long lines according to RFC 5545
+      .replaceAll(RegExp('.{75}'), '\$0\r\n ');
+  }
 
   // New method to update page size (and reset current page)
   void setPageSize(int size) {
@@ -223,4 +278,4 @@ class AbsenceCubit extends Cubit<AbsenceState> {
       _applyFiltersAndEmit();
     }
   }
-} 
+}

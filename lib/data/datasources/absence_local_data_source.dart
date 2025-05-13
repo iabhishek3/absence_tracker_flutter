@@ -8,7 +8,6 @@ abstract class AbsenceLocalDataSource {
 
 @Injectable(as: AbsenceLocalDataSource)
 class AbsenceLocalDataSourceImpl implements AbsenceLocalDataSource {
-  // TODO: Implement local storage
   @override
   Future<List<AbsenceModel>> getLastCachedAbsences() async => [];
 

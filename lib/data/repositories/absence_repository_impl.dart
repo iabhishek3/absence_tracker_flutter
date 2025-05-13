@@ -4,7 +4,6 @@ import '../../core/error/failures.dart';
 import '../../domain/entities/absence.dart';
 import '../../domain/repositories/absence_repository.dart';
 import '../datasources/absence_remote_data_source.dart';
-import '../models/absence_model.dart';
 import '../models/member_model.dart';
 
 @Injectable(as: AbsenceRepository)

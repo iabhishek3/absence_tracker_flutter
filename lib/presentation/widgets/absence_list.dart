@@ -5,6 +5,7 @@ import 'package:absence_tracker_flutter/presentation/widgets/absence_filters.dar
 import 'package:absence_tracker_flutter/presentation/widgets/absence_details_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:absence_tracker_flutter/core/utils/file_download_util.dart';
 
 class AbsenceList extends StatelessWidget {
   const AbsenceList({super.key});
@@ -331,7 +332,43 @@ class _LoadedState extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              AbsenceFilters(state: state),
+                AbsenceFilters(state: state),
+                      const Spacer(),
+              ElevatedButton.icon(
+                onPressed: () {
+                  print('Export button clicked');
+                  final icalData = context.read<AbsenceCubit>().generateICalData();
+                  print('Generated iCal data length: ${icalData.length}');
+                  
+                  if (icalData.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Failed to generate calendar data. Please try again.'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+                  
+                  FileDownloadUtil.downloadString(
+                    content: icalData,
+                    fileName: 'absences.ics',
+                  );
+                },
+                icon: const Icon(Icons.download, size: 20),
+                label: const Text('Export to iCal'),
+                style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.white,
+                  // foregroundColor: Colors.blue[700],
+                  elevation: 1,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+            
             ],
           ),
           const SizedBox(height: 24),
