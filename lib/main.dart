@@ -1,4 +1,5 @@
 import 'package:absence_tracker_flutter/core/di/injection.dart';
+import 'package:absence_tracker_flutter/presentation/cubit/absence/absence_cubit.dart';
 import 'package:absence_tracker_flutter/presentation/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => getIt<ThemeCubit>(),
+        ),
+         BlocProvider(
+          create: (context) => getIt<AbsenceCubit>(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, bool>(

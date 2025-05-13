@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../dashboard/sidebar.dart';
-import '../dashboard/header.dart';
+import 'sidebar.dart';
+import 'header.dart';
 
 class DashboardLayout extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;

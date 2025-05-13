@@ -1,3 +1,5 @@
+import 'package:absence_tracker_flutter/presentation/widgets/absence_stats.dart';
+import 'package:absence_tracker_flutter/presentation/widgets/absence_list.dart';
 import 'package:flutter/material.dart';
 
 class AbsenceListPage extends StatelessWidget {
@@ -5,14 +7,18 @@ class AbsenceListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 600,
-      child: Center(
-        child: Text(
-          "Hi world!",
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
-    );
+    return  SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                AbsenceStats(),
+                                SizedBox(height: 10),
+                                AbsenceList(),
+                              ],
+                            ),
+                          ),
+                        );
   }
 } 
