@@ -124,8 +124,19 @@ flutter run -d chrome
 
 # Build for production
 flutter build web
+
+# Run on iOS iPad
+flutter run -d "iPad Pro" # or your specific iPad simulator name
 ```
 
+### Platform Support 📱
+
+The application has been tested and works on:
+- Web browsers (Chrome, Firefox, Safari)
+- iOS devices (iPad Pro and other iOS tablets)
+- Android tablets
+
+Each platform maintains the same fluid user experience and feature set while adapting to the respective platform's design guidelines.
 
 ## Architecture 🏗️
 
@@ -197,13 +208,12 @@ genhtml coverage/lcov.info -o coverage/html
 
 View the coverage report at `coverage/html/index.html`
 
-## 📞 Support
+## 📞 Contact Me
 
-For support and inquiries:
+For inquiries:
 
 - ✉️ Email: [abhishek.111002@gmail.com](mailto:abhishek.111002@gmail.com)
 - 💼 LinkedIn: [Abhishek Kumar](https://www.linkedin.com/in/iabhishek-kumar/)
-- 💬 Join our Slack channel
 
 ## 📸 Screenshots
 
@@ -211,15 +221,17 @@ For support and inquiries:
 <table>
   <tr>
     <td>Absence List View</td>
-    <td>Loading State</td>
-    <td>Statistics View</td>
-    <td>Filter Options</td>
+    <td>Absence Detail page</td>
+    <td>Absence List Filter</td>
+    <td>Absence List dark mode</td>
+      <td>Application in Ipad</td>
   </tr>
   <tr>
     <td><img src="screenshots/home_page_light_expanded.png" width="200"/></td>
     <td><img src="screenshots/home_page_light_absense_detail.png" width="200"/></td>
     <td><img src="screenshots/home_page_light_filter_by_status.png" width="200"/></td>
     <td><img src="screenshots/home_page_night_absense.png" width="200"/></td>
+       <td><img src="screenshots/ipad-screen.png" width="200"/></td>
   </tr>
 </table>
 </div>
