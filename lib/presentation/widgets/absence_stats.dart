@@ -25,7 +25,8 @@ class _AbsenceStatsState extends State<AbsenceStats> {
         if (state is AbsenceLoading) {
           return Card(
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -115,7 +116,7 @@ class _AbsenceStatsState extends State<AbsenceStats> {
         // Get all absences from the cubit (not just filtered)
         final cubit = context.read<AbsenceCubit>();
         final List<Absence> absences = cubit.allAbsences;
-        
+
         final totalAbsences = absences.length;
         final absencesByType = _getAbsencesByType(absences);
         final absencesByStatus = _getAbsencesByStatus(absences);
@@ -128,7 +129,8 @@ class _AbsenceStatsState extends State<AbsenceStats> {
 
         return Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -153,8 +155,9 @@ class _AbsenceStatsState extends State<AbsenceStats> {
                         final count = e.value;
                         final days = absences
                             .where((a) => a.type.name == type)
-                            .fold<int>(0, (int sum, a) => sum + a.durationInDays);
-                        
+                            .fold<int>(
+                                0, (int sum, a) => sum + a.durationInDays);
+
                         IconData icon;
                         Color color;
                         switch (type.toLowerCase()) {
@@ -270,12 +273,12 @@ class _VisualStatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.08),
+            color: Colors.black.withAlpha(20),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(color: color.withOpacity(0.12)),
+        border: Border.all(color: color.withAlpha((0.12 * 255).round())),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,7 +287,7 @@ class _VisualStatCard extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withAlpha(38),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 padding: const EdgeInsets.all(8),
@@ -315,7 +318,7 @@ class _VisualStatCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          if (value == '...') 
+          if (value == '...')
             Row(
               children: [
                 SizedBox(
@@ -348,4 +351,4 @@ class _VisualStatCard extends StatelessWidget {
       ),
     );
   }
-} 
+}

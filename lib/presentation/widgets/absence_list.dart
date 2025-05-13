@@ -53,7 +53,7 @@ class _LoadingState extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+           color: Colors.black.withAlpha(10),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -279,7 +279,7 @@ class _LoadedState extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+           color: Colors.black.withAlpha(10),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -336,9 +336,7 @@ class _LoadedState extends StatelessWidget {
                       const Spacer(),
               ElevatedButton.icon(
                 onPressed: () {
-                  print('Export button clicked');
                   final icalData = context.read<AbsenceCubit>().generateICalData();
-                  print('Generated iCal data length: ${icalData.length}');
                   
                   if (icalData.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -629,7 +627,7 @@ class _AbsenceListRow extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.1),
+                  color: statusColor.withAlpha(26),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -649,58 +647,3 @@ class _AbsenceListRow extends StatelessWidget {
   }
 }
 
-class _DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData icon;
-
-  const _DetailRow({
-    required this.label,
-    required this.value,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            icon,
-            color: Colors.blue,
-            size: 20,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Color(0xFF64748B),
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Color(0xFF1A2332),
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-} 

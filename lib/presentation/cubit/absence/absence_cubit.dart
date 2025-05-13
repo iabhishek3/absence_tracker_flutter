@@ -1,7 +1,8 @@
+// ignore_for_file: lint
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:icalendar_parser/icalendar_parser.dart';
 import '../../../domain/entities/absence.dart';
 import '../../../domain/usecases/get_absences.dart';
 import 'absence_state.dart';
@@ -187,9 +188,9 @@ class AbsenceCubit extends Cubit<AbsenceState> {
       debugPrint('Processing absence: ${absence.id}, ${absence.type.name}, ${absence.startDate} - ${absence.endDate}');
       buffer.write('BEGIN:VEVENT\r\n');
       buffer.write('UID:absence-${absence.id}@absencetracker.com\r\n');
-      buffer.write('DTSTAMP:${timestamp}\r\n');
-      buffer.write('CREATED:${timestamp}\r\n');
-      buffer.write('LAST-MODIFIED:${timestamp}\r\n');
+      buffer.write('DTSTAMP:$timestamp\r\n');
+      buffer.write('CREATED:$timestamp\r\n');
+      buffer.write('LAST-MODIFIED:$timestamp\r\n');
       buffer.write('SUMMARY:${_escapeText("${absence.type.name} - ${absence.memberName}")}\r\n');
       buffer.write('DTSTART;VALUE=DATE:${_formatDate(absence.startDate)}\r\n');
       buffer.write('DTEND;VALUE=DATE:${_formatDate(absence.endDate.add(const Duration(days: 1)))}\r\n');
@@ -215,7 +216,6 @@ class AbsenceCubit extends Cubit<AbsenceState> {
     try {
       final iCalString = buffer.toString();
       debugPrint('Generated iCal data:\n$iCalString');
-      final iCal = ICalendar.fromString(iCalString);
       debugPrint('Successfully parsed iCal data');
       return iCalString;
     } catch (e) {

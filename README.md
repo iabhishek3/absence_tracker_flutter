@@ -108,18 +108,13 @@ flutter doctor
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/absence_tracker_flutter.git
+git clone https://github.com/iabhishek3/absence_tracker_flutter
 cd absence_tracker_flutter
 ```
 
 2. Install dependencies:
 ```bash
 flutter pub get
-```
-
-3. Enable web support (if not already enabled):
-```bash
-flutter config --enable-web
 ```
 
 4. Run the web app:
@@ -170,6 +165,15 @@ lib/
   ├── presentation/   # UI layer (widgets, screens, cubits)
   └── main.dart       # Entry point
 ```
+
+### Clean Architecture Diagram
+
+Below is a visual representation of the Clean Architecture principles followed in this project:
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/khaledsawan/clean_architecture_flutter/main/architecture-proposal.png" alt="Clean Architecture Diagram" width="600"/>
+</div>
+
 
 ### State Management
 - BLoC/Cubit pattern for state management

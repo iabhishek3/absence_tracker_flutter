@@ -89,7 +89,7 @@ class AbsenceDetailsDialog extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: statusColor.withOpacity(0.1),
+                            color: statusColor.withAlpha(26),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -168,7 +168,7 @@ class _DetailRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.blue.withAlpha(26),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Icon(
